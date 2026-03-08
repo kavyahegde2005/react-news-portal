@@ -11,7 +11,8 @@ export default class Business extends Component {
       articles: [],
       loading: false,
       page: 1,
-      totalResults: 0
+      totalResults: 0,
+      error: null
     }
   }
   async componentDidMount() {
@@ -22,12 +23,14 @@ export default class Business extends Component {
       let parsedData = await data.json();
       console.log(parsedData);
       if (parsedData.status === "ok") {
-        this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults });
+        this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults, error: null });
       } else {
         console.error("NewsAPI error", parsedData);
+        this.setState({ error: parsedData.message || "Unknown API error" });
       }
     } catch (err) {
       console.error("Fetch failed", err);
+      this.setState({ error: err.message });
     }
   }
   previousPage = async () => {
@@ -53,7 +56,8 @@ export default class Business extends Component {
   render() {
       return (
         <div className='container my-3'>
-          {this.state.articles.length === 0 && <p className="text-center">No articles available.</p>}
+          {this.state.error && <p className="text-center text-danger">{this.state.error}</p>}
+        {this.state.articles.length === 0 && !this.state.error && <p className="text-center">No articles available.</p>}
           <div className='row'>
             {this.state.articles && this.state.articles.map((element) => {
               return <div className='col-md-4' key={element.url}>
