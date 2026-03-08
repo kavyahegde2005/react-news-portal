@@ -45,7 +45,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
-      <Router basename={process.env.PUBLIC_URL}>
+      <Router>
         {/* using PUBLIC_URL ensures routes work when the app is hosted under a sub‑path (GitHub Pages) */}
         <Navbar title="Quick News" mode={this.state.mode} toggleMode={this.toggleMode} switch="Dark mode" />
         <Routes>

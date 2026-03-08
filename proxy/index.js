@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const API_KEY = process.env.eb47dd6c708e4f479b8b15fbaad8c905;
+const API_KEY = process.env.NEWSAPI_KEY;
 
 if (!API_KEY) {
   console.error('NEWSAPI_KEY environment variable is required');
@@ -27,6 +27,11 @@ app.get('/api', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Proxy server running on port ${PORT}`);
-});
+// For Vercel, export the app instead of calling listen directly if running as a serverless function
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Proxy server running on port ${PORT}`);
+  });
+}
+
+export default app;
