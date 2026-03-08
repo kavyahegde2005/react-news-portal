@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import Newsitem from './Newsitem';
 
 
-export default class Tech extends Component {
+export default class Bitcoin extends Component {
 
-    constructor() {
+  constructor() {
     super();
-    console.log("Hello I am a constructor from news component");
+    console.log("Hello I am a constructor from bitcoin component");
     this.state = {
       articles: [],
       loading: false,
@@ -15,35 +15,61 @@ export default class Tech extends Component {
     }
   }
   async componentDidMount() {
-    console.log("cdm");
+    console.log("cdm bitcoin");
     let url = "https://newsapi.org/v2/everything?q=bitcoin&apiKey=eb47dd6c708e4f479b8b15fbaad8c905&pageSize=20";
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults });
+    try {
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      console.log(parsedData);
+      if (parsedData.status === "ok") {
+        this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults });
+      } else {
+        console.error("NewsAPI error", parsedData);
+      }
+    } catch (err) {
+      console.error("Fetch failed", err);
+    }
   }
+
   previousPage = async () => {
     console.log("previous");
     let url = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=eb47dd6c708e4f479b8b15fbaad8c905&page=${this.state.page - 1}&pageSize=20`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    console.log(parsedData);
-    this.setState({ articles: parsedData.articles, page: this.state.page - 1 })
+    try {
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      console.log(parsedData);
+      if (parsedData.status === "ok") {
+        this.setState({ articles: parsedData.articles, page: this.state.page - 1 });
+      } else {
+        console.error("NewsAPI error", parsedData);
+      }
+    } catch (err) {
+      console.error("Fetch failed", err);
+    }
   }
   
-
   nextPage = async () => {
     console.log("next");
     let url = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=eb47dd6c708e4f479b8b15fbaad8c905&page=${this.state.page + 1}&pageSize=20`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    console.log(parsedData);
-    this.setState({ articles: parsedData.articles, page: this.state.page + 1 })
+    try {
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      console.log(parsedData);
+      if (parsedData.status === "ok") {
+        this.setState({ articles: parsedData.articles, page: this.state.page + 1 });
+      } else {
+        console.error("NewsAPI error", parsedData);
+      }
+    } catch (err) {
+      console.error("Fetch failed", err);
+    }
   }
 
 
   render() {
       return (
         <div className='container my-3'>
+          {this.state.articles.length === 0 && <p className="text-center">No articles available.</p>}
           <div className='row'>
             {this.state.articles && this.state.articles.map((element) => {
               return <div className='col-md-4' key={element.url}>

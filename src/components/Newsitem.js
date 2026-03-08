@@ -3,6 +3,12 @@ import React, { Component } from 'react'
 export default class Newsitem extends Component {
   render() {
     let {title, description, imageUrl, newsUrl} = this.props;
+    // Convert HTTP to HTTPS to avoid mixed content issues on HTTPS sites
+    imageUrl = imageUrl ? imageUrl.replace(/^http:/, 'https:') : null;
+    // if there is still no image, use a generic placeholder
+    if (!imageUrl) {
+      imageUrl = `${process.env.PUBLIC_URL}/placeholder.png`;
+    }
     return (
       <div className='container'>
         <div className="card" style={{width: "18rem"}}>
