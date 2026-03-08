@@ -67,4 +67,34 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 ### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify]
+
+---
+
+## Proxy Server (for production deployment)
+
+NewsAPI's free Developer plan forbids browser requests from any origin other
+than `localhost`. In order to deploy the frontend on GitHub Pages you must
+route API calls through a simple server that adds your API key and forwards the
+response. The `proxy/` directory contains a minimal Express application that
+can be deployed to any Node host (Heroku, Vercel, Render, etc.).
+
+1. Enter the proxy folder and install dependencies:
+   ```bash
+   cd proxy
+   npm install
+   ```
+2. Copy `.env.example` to `.env` and set `NEWSAPI_KEY` (and optionally `PORT`).
+3. Run locally with `npm start` or deploy the folder with your hosting provider.
+   After deployment you'll have a base URL such as `https://my-proxy.example.com`.
+4. In the React project root, set the environment variable pointing at the
+   proxy before building the frontend:
+   ```bash
+   REACT_APP_PROXY_URL=https://my-proxy.example.com npm run build
+   ```
+
+The frontend components now use a helper in `src/api.js` which calls the
+proxy instead of contacting NewsAPI directly.  Read `proxy/README.md` for full
+instructions.  This change allows your site to fetch real articles on
+GitHub Pages.
+(https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

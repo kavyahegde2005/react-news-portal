@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Newsitem from './Newsitem';
+import { fetchNews } from '../api';
 
 
 export default class Bitcoin extends Component {
@@ -17,10 +18,8 @@ export default class Bitcoin extends Component {
   }
   async componentDidMount() {
     console.log("cdm bitcoin");
-    let url = "https://newsapi.org/v2/everything?q=bitcoin&apiKey=eb47dd6c708e4f479b8b15fbaad8c905&pageSize=20";
     try {
-      let data = await fetch(url);
-      let parsedData = await data.json();
+      const parsedData = await fetchNews({ q: 'bitcoin', pageSize: 20 });
       console.log(parsedData);
       if (parsedData.status === "ok") {
         this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults, error: null });
@@ -36,35 +35,29 @@ export default class Bitcoin extends Component {
 
   previousPage = async () => {
     console.log("previous");
-    let url = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=eb47dd6c708e4f479b8b15fbaad8c905&page=${this.state.page - 1}&pageSize=20`;
     try {
-      let data = await fetch(url);
-      let parsedData = await data.json();
+      const parsedData = await fetchNews({ q: 'bitcoin', pageSize: 20, page: this.state.page - 1 });
       console.log(parsedData);
       if (parsedData.status === "ok") {
         this.setState({ articles: parsedData.articles, page: this.state.page - 1 });
-      } else {
-        console.error("NewsAPI error", parsedData);
       }
     } catch (err) {
       console.error("Fetch failed", err);
+      this.setState({ error: err.message });
     }
   }
   
   nextPage = async () => {
     console.log("next");
-    let url = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=eb47dd6c708e4f479b8b15fbaad8c905&page=${this.state.page + 1}&pageSize=20`;
     try {
-      let data = await fetch(url);
-      let parsedData = await data.json();
+      const parsedData = await fetchNews({ q: 'bitcoin', pageSize: 20, page: this.state.page + 1 });
       console.log(parsedData);
       if (parsedData.status === "ok") {
         this.setState({ articles: parsedData.articles, page: this.state.page + 1 });
-      } else {
-        console.error("NewsAPI error", parsedData);
       }
     } catch (err) {
       console.error("Fetch failed", err);
+      this.setState({ error: err.message });
     }
   }
 

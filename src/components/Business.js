@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Newsitem from './Newsitem';
+import { fetchNews } from '../api';
 
 
 export default class Business extends Component {
@@ -17,10 +18,8 @@ export default class Business extends Component {
   }
   async componentDidMount() {
     console.log("cdm business");
-    let url = "https://newsapi.org/v2/everything?q=apple&from=2026-03-06&to=2026-03-06&sortBy=popularity&apiKey=eb47dd6c708e4f479b8b15fbaad8c905&pageSize=20";
     try {
-      let data = await fetch(url);
-      let parsedData = await data.json();
+      const parsedData = await fetchNews({ q: 'apple', from: '2026-03-06', to: '2026-03-06', sortBy: 'popularity', pageSize: 20 });
       console.log(parsedData);
       if (parsedData.status === "ok") {
         this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults, error: null });
@@ -35,21 +34,31 @@ export default class Business extends Component {
   }
   previousPage = async () => {
     console.log("previous");
-    let url = `https://newsapi.org/v2/everything?q=apple&from=2026-03-06&to=2026-03-06&sortBy=popularity&apiKey=eb47dd6c708e4f479b8b15fbaad8c905&page=${this.state.page - 1}&pageSize=20`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    console.log(parsedData);
-    this.setState({ articles: parsedData.articles, page: this.state.page - 1 })
+    try {
+      const parsedData = await fetchNews({ q: 'apple', from: '2026-03-06', to: '2026-03-06', sortBy: 'popularity', pageSize: 20, page: this.state.page - 1 });
+      console.log(parsedData);
+      if (parsedData.status === "ok") {
+        this.setState({ articles: parsedData.articles, page: this.state.page - 1 });
+      }
+    } catch (err) {
+      console.error("Fetch failed", err);
+      this.setState({ error: err.message });
+    }
   }
   
 
   nextPage = async () => {
     console.log("next");
-    let url = `https://newsapi.org/v2/everything?q=apple&from=2026-03-06&to=2026-03-06&sortBy=popularity&apiKey=eb47dd6c708e4f479b8b15fbaad8c905&page=${this.state.page + 1}&pageSize=20`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    console.log(parsedData);
-    this.setState({ articles: parsedData.articles, page: this.state.page + 1 })
+    try {
+      const parsedData = await fetchNews({ q: 'apple', from: '2026-03-06', to: '2026-03-06', sortBy: 'popularity', pageSize: 20, page: this.state.page + 1 });
+      console.log(parsedData);
+      if (parsedData.status === "ok") {
+        this.setState({ articles: parsedData.articles, page: this.state.page + 1 });
+      }
+    } catch (err) {
+      console.error("Fetch failed", err);
+      this.setState({ error: err.message });
+    }
   }
 
 
